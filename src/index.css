@@ -1,0 +1,30 @@
+:root {
+  --navy: #2a344d;
+  --purple: #413d79;
+  --accent: #6b52a8;
+  --hair: #8094bc;
+  --gold: #e0b989;
+  --peach: #f1dabd;
+
+  color-scheme: dark;
+  font-family: 'ClarikaProGrot', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  background: var(--navy);
+  color: #fff;
+  overflow: hidden;
+}
