@@ -1,0 +1,14 @@
+{
+  "redirects": [
+    {
+      "source": "/pluginmanager",
+      "destination": "https://github.com/Sarxina/sarxina-plugin-manager/releases/latest",
+      "permanent": false
+    },
+    {
+      "source": "/pluginmanager/:path*",
+      "destination": "https://github.com/Sarxina/sarxina-plugin-manager/releases/latest",
+      "permanent": false
+    }
+  ]
+}
