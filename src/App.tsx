@@ -17,6 +17,13 @@ export function App() {
         <h1 className="title">Sarxina</h1>
         <p className="subtitle">Librarian of the Celestial Archives</p>
       </div>
+      <footer className="links">
+        <a href="https://www.youtube.com/@SarxinaVT">YouTube</a>
+        <a href="https://www.twitch.tv/sarxinavt">Twitch</a>
+        <a href="https://x.com/SarxinaVT">X</a>
+        <a href="/privacy/">Privacy Policy</a>
+        <a href="/terms/">Terms of Service</a>
+      </footer>
     </main>
   );
 }
