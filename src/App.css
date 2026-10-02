@@ -61,6 +61,32 @@
   text-shadow: 0 2px 14px rgba(0, 0, 0, 0.6);
 }
 
+.links {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 22px;
+  z-index: 2;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px 22px;
+  padding: 0 6vw;
+  font-size: 0.85rem;
+  letter-spacing: 0.08em;
+}
+
+.links a {
+  color: rgba(255, 255, 255, 0.72);
+  text-decoration: none;
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.6);
+}
+
+.links a:hover,
+.links a:focus-visible {
+  color: var(--gold);
+}
+
 @keyframes fade-up {
   from {
     opacity: 0;
