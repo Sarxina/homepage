@@ -1,6 +1,6 @@
 import { siInstagram, siTiktok, siTwitch, siX, siYoutube } from 'simple-icons';
 
-export const TAGLINE = 'I stream whatever deranged ideas come to my head.';
+export const TAGLINE = 'Librarian of the Celestial Archives';
 
 export type SiteLink = {
   id: string;
@@ -29,7 +29,8 @@ export const NEXT_STREAM = {
   hours: 4,
 };
 
-// The uploads playlist that holds only the channel's Shorts, newest first.
+// The channel's own uploads playlists, newest first: one holds only the long videos, the other only the Shorts.
+export const VIDEOS_PLAYLIST = 'UULFrkGtXHU44ZI-dR2tg9rJtQ';
 export const SHORTS_PLAYLIST = 'UUSHrkGtXHU44ZI-dR2tg9rJtQ';
 
 export type Tool = { name: string; kind: string; blurb: string; url: string; action: string };
