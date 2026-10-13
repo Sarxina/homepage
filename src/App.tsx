@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import './App.css';
-import { CREDITS, LINKS, NEXT_STREAM, SHORTS_PLAYLIST, TAGLINE, TOOLS, TWITCH_LOGIN, TWITCH_URL } from './data/site';
+import { CREDITS, LINKS, NEXT_STREAM, SHORTS_PLAYLIST, TAGLINE, TOOLS, TWITCH_LOGIN, TWITCH_URL, VIDEOS_PLAYLIST } from './data/site';
 import { SceneCanvas } from './scene/SceneCanvas';
 
 function Icon({ path }: { path: string }) {
@@ -110,7 +110,7 @@ export function App() {
                 <span className="dock__handle">{link.handle}</span>
               </a>
             ))}
-            <a className="dock__more" href="#shorts" aria-label="Shorts, tools and credits below">
+            <a className="dock__more" href="#videos" aria-label="Videos, tools and credits below">
               <span />
             </a>
           </nav>
@@ -118,27 +118,25 @@ export function App() {
       </header>
 
       <main className="below">
-        <section id="shorts" className="block">
-          <h2>Newest shorts</h2>
-          <div className="shorts">
+        <section id="videos" className="block">
+          <h2>Latest videos</h2>
+          <div className="videos">
             <iframe
-              title="Sarxina's newest Shorts"
+              className="videos__long"
+              title="Sarxina's latest video"
+              src={`https://www.youtube-nocookie.com/embed/videoseries?list=${VIDEOS_PLAYLIST}`}
+              loading="lazy"
+              allow="accelerometer; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowFullScreen
+            />
+            <iframe
+              className="videos__short"
+              title="Sarxina's latest Short"
               src={`https://www.youtube-nocookie.com/embed/videoseries?list=${SHORTS_PLAYLIST}`}
               loading="lazy"
               allow="accelerometer; encrypted-media; gyroscope; picture-in-picture; web-share"
               allowFullScreen
             />
-            <div className="shorts__side">
-              <p className="shorts__line">A new short every day at 3 PM Eastern.</p>
-              <div className="shorts__links">
-                {LINKS.filter((link) => ['youtube', 'tiktok', 'instagram'].includes(link.id)).map((link) => (
-                  <a key={link.id} className={`dock__link dock__link--${link.id}`} href={link.url} target="_blank" rel="noreferrer">
-                    <Icon path={link.icon} />
-                    <span className="dock__name">Watch on {link.name}</span>
-                  </a>
-                ))}
-              </div>
-            </div>
           </div>
         </section>
 
