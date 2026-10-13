@@ -1,13 +1,15 @@
 :root {
-  --navy: #2a344d;
-  --purple: #413d79;
-  --accent: #6b52a8;
-  --hair: #8094bc;
-  --gold: #e0b989;
-  --peach: #f1dabd;
+  --night: #0d1130;
+  --navy: #151b40;
+  --panel: rgba(18, 23, 56, 0.74);
+  --line: rgba(224, 185, 137, 0.42);
+  --gold: #e6c08c;
+  --gold-bright: #ffd98a;
+  --ink: #f6f2ea;
+  --muted: rgba(246, 242, 234, 0.66);
 
   color-scheme: dark;
-  font-family: 'ClarikaProGrot', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -18,13 +20,30 @@
   box-sizing: border-box;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 html,
-body,
-#root {
-  height: 100%;
+body {
   margin: 0;
   padding: 0;
-  background: var(--navy);
-  color: #fff;
-  overflow: hidden;
+  background: var(--night);
+  color: var(--ink);
+}
+
+a {
+  color: inherit;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+  }
 }

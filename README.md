@@ -1,6 +1,6 @@
 # sarxina.com
 
-Landing page for Sarxina — Librarian of the Celestial Archives.
+My homepage: the library illustration, alive in the browser, with everything I do one tap away.
 
 ## Dev
 
@@ -9,11 +9,18 @@ npm install
 npm run dev
 ```
 
+## Changing things
+
+- Links, the next stream, the tools shelf and the credits: `src/data/site.ts`.
+- The scene: `src/scene/engine.ts` draws the illustration's separate pieces on a canvas. The pieces and their joints
+  are in `public/scene/` (`rig.json` plus one picture per piece).
+
 ## Deploy
 
-Hosted on Vercel. Pushes to `main` auto-deploy.
+Hosted on AWS Amplify. Pushes to `main` build and deploy.
 
 ## Routes
 
-- `/` — animated landing page
-- `/pluginmanager` — 302 redirect to latest Sarxina Plugin Manager GitHub release
+- `/` the homepage
+- `/pluginmanager` redirects to the latest Sarxina Plugin Manager release
+- `/privacy/`, `/terms/`
