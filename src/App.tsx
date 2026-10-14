@@ -1,6 +1,8 @@
 import { useCallback, useEffect, useState } from 'react';
 import './App.css';
-import { CREDITS, LINKS, NEXT_STREAM, SHORTS_PLAYLIST, TAGLINE, TOOLS, TWITCH_LOGIN, TWITCH_URL, VIDEOS_PLAYLIST } from './data/site';
+import { CREDITS, LINKS, OBS_PLUGINS_REPO, SHORTS_PLAYLIST, TAGLINE, TOOLS, TWITCH_ID, TWITCH_LOGIN, TWITCH_URL, VIDEOS_PLAYLIST } from './data/site';
+import { obsPlugins, type Tool } from './feeds/github';
+import { nextStream, type Stream } from './feeds/twitch';
 import { SceneCanvas } from './scene/SceneCanvas';
 
 function Icon({ path }: { path: string }) {
@@ -31,6 +33,45 @@ function useLive() {
   return live;
 }
 
+/** the next stream on the Twitch schedule; null when nothing is on it or it could not be read */
+function useNextStream() {
+  const [stream, setStream] = useState<Stream | null>(null);
+  useEffect(() => {
+    let alive = true;
+    const read = () =>
+      nextStream(TWITCH_ID)
+        .then((next) => alive && setStream(next))
+        .catch(() => alive && setStream(null));
+    read();
+    const again = window.setInterval(read, 30 * 60_000);
+    return () => {
+      alive = false;
+      window.clearInterval(again);
+    };
+  }, []);
+  return stream;
+}
+
+/** the OBS plugins from their repository; empty until they are in */
+function useObsPlugins() {
+  const [plugins, setPlugins] = useState<Tool[]>([]);
+  useEffect(() => {
+    let alive = true;
+    obsPlugins(OBS_PLUGINS_REPO)
+      .then((found) => alive && setPlugins(found))
+      .catch(() =>
+        alive &&
+        setPlugins([
+          { name: 'OBS plugins', kind: 'OBS plugins', blurb: '', url: `https://github.com/${OBS_PLUGINS_REPO}`, action: 'See them all' },
+        ]),
+      );
+    return () => {
+      alive = false;
+    };
+  }, []);
+  return plugins;
+}
+
 function countdown(ms: number) {
   const minutes = Math.floor(ms / 60_000);
   const d = Math.floor(minutes / 1440);
@@ -43,14 +84,12 @@ function countdown(ms: number) {
 
 function StreamStatus() {
   const live = useLive();
+  const stream = useNextStream();
   const [now, setNow] = useState(() => Date.now());
   useEffect(() => {
     const tick = window.setInterval(() => setNow(Date.now()), 30_000);
     return () => window.clearInterval(tick);
   }, []);
-
-  const starts = new Date(NEXT_STREAM.starts).getTime();
-  const over = now > starts + NEXT_STREAM.hours * 3_600_000;
 
   if (live) {
     return (
@@ -63,16 +102,8 @@ function StreamStatus() {
       </a>
     );
   }
-  if (over) {
-    return (
-      <a className="status" href={TWITCH_URL} target="_blank" rel="noreferrer">
-        <span className="status__text">
-          <strong>Next stream soon</strong>
-          <span>Follow on Twitch to catch it</span>
-        </span>
-      </a>
-    );
-  }
+  if (!stream || now > stream.ends) return null;
+  const { starts } = stream;
   const when = new Intl.DateTimeFormat(undefined, { weekday: 'long', hour: 'numeric', minute: '2-digit', timeZoneName: 'short' }).format(new Date(starts));
   return (
     <a className="status" href={TWITCH_URL} target="_blank" rel="noreferrer">
@@ -80,7 +111,7 @@ function StreamStatus() {
         <strong>
           Next stream {now < starts ? countdown(starts - now) : 'starting now'}
         </strong>
-        <span>{NEXT_STREAM.title}</span>
+        {stream.title && <span>{stream.title}</span>}
         <span className="status__when">{when}</span>
       </span>
     </a>
@@ -89,6 +120,7 @@ function StreamStatus() {
 
 export function App() {
   const [ready, setReady] = useState(false);
+  const plugins = useObsPlugins();
   const onReady = useCallback(() => setReady(true), []);
 
   return (
@@ -143,11 +175,11 @@ export function App() {
         <section id="tools" className="block">
           <h2>Things I made that you can use</h2>
           <div className="tools">
-            {TOOLS.map((tool) => (
+            {[...plugins, ...TOOLS].map((tool) => (
               <a key={tool.name} className="tool" href={tool.url} target="_blank" rel="noreferrer">
                 <span className="tool__kind">{tool.kind}</span>
                 <strong className="tool__name">{tool.name}</strong>
-                <span className="tool__blurb">{tool.blurb}</span>
+                {tool.blurb && <span className="tool__blurb">{tool.blurb}</span>}
                 <span className="tool__action">{tool.action}</span>
               </a>
             ))}
