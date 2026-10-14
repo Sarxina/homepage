@@ -1,4 +1,5 @@
 import { siInstagram, siTiktok, siTwitch, siX, siYoutube } from 'simple-icons';
+import type { Tool } from '../feeds/github';
 
 export const TAGLINE = 'Librarian of the Celestial Archives';
 
@@ -20,29 +21,18 @@ export const LINKS: SiteLink[] = [
 ];
 
 export const TWITCH_LOGIN = 'sarxinavt';
+export const TWITCH_ID = '1030071813'; // the channel's id; the next stream comes from its Twitch schedule
 export const TWITCH_URL = 'https://www.twitch.tv/sarxinavt';
-
-// The next stream. Change this once a week; a past date falls back to a plain "follow on Twitch" line.
-export const NEXT_STREAM = {
-  title: 'Final Fantasy X, but I enabled every mod',
-  starts: '2026-10-16T16:00:00-04:00',
-  hours: 4,
-};
 
 // The channel's own uploads playlists, newest first: one holds only the long videos, the other only the Shorts.
 export const VIDEOS_PLAYLIST = 'UULFrkGtXHU44ZI-dR2tg9rJtQ';
 export const SHORTS_PLAYLIST = 'UUSHrkGtXHU44ZI-dR2tg9rJtQ';
 
-export type Tool = { name: string; kind: string; blurb: string; url: string; action: string };
+// The OBS plugins come from this repository: one card per README section that has a release.
+export const OBS_PLUGINS_REPO = 'Sarxina/sarxina-obs-plugins';
 
+// The other things on the shelf, after the OBS plugins.
 export const TOOLS: Tool[] = [
-  {
-    name: 'SlingLive',
-    kind: 'OBS plugin',
-    blurb: 'Replaces the OBS Controls panel. To go live or record, you have to hit the right button with a slingshot.',
-    url: 'https://github.com/Sarxina/sarxina-obs-plugins/releases/tag/slinglive-v1.2.0',
-    action: 'Download',
-  },
   {
     name: 'Plugin Manager',
     kind: 'App',
