@@ -39,8 +39,8 @@ export const TOOLS: Tool[] = [
   {
     name: 'SlingLive',
     kind: 'OBS plugin',
-    blurb: 'Replaces the OBS Controls panel. To go live or record, you have to hit the right button with a slingshot, or drop it down a Plinko board.',
-    url: 'https://github.com/Sarxina/sarxina-obs-plugins/releases/latest',
+    blurb: 'Replaces the OBS Controls panel. To go live or record, you have to hit the right button with a slingshot.',
+    url: 'https://github.com/Sarxina/sarxina-obs-plugins/releases/tag/slinglive-v1.2.0',
     action: 'Download',
   },
   {
