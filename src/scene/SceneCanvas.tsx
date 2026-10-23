@@ -9,21 +9,38 @@ export function SceneCanvas({ onReady }: { onReady: () => void }) {
   const canvas = useRef<HTMLCanvasElement>(null);
   const bookLinks = useRef(new Map<string, HTMLAnchorElement>());
   const scene = useRef<LibraryScene | null>(null);
+  const fallback = useRef<HTMLVideoElement>(null);
+  const held = useRef(false); // the visitor paused him
   const [failed, setFailed] = useState(false);
+  const [moving, setMoving] = useState(false);
+  const [paused, setPaused] = useState(false);
 
   useEffect(() => {
     let alive = true;
     let lastX = 0;
     let watcher: IntersectionObserver | undefined;
+    // a book near the edge of the screen keeps its label inside it: the labels' half widths, measured once per size
+    const EDGE = 24;
+    let viewWidth = canvas.current?.clientWidth ?? 0;
+    const labelHalf = new Map<string, number>();
     const still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     const onMove = (e: PointerEvent) => {
       scene.current?.setPointer(e.clientX, e.clientY, e.clientX - lastX);
       lastX = e.clientX;
     };
-    const onResize = () => scene.current?.resize();
+    const onResize = () => {
+      viewWidth = canvas.current?.clientWidth ?? 0;
+      labelHalf.clear();
+      scene.current?.resize();
+      // a resize clears the canvas: while he is paused, draw one frame and hold it again
+      if (held.current) {
+        scene.current?.resume();
+        requestAnimationFrame(() => scene.current?.pause());
+      }
+    };
     const onScroll = () => scene.current?.setZoom(window.scrollY / window.innerHeight);
-    const onVisible = () => (document.hidden ? scene.current?.pause() : scene.current?.resume());
+    const onVisible = () => (document.hidden || held.current ? scene.current?.pause() : scene.current?.resume());
 
     (async () => {
       try {
@@ -34,22 +51,35 @@ export function SceneCanvas({ onReady }: { onReady: () => void }) {
         made.onBooks = (spots) => {
           for (const s of spots) {
             const el = bookLinks.current.get(s.name);
-            if (el) el.style.transform = `translate(${s.x - s.r}px, ${s.y - s.r}px)`;
-            if (el) el.style.width = el.style.height = `${s.r * 2}px`;
+            if (!el) continue;
+            el.style.transform = `translate(${s.x - s.r}px, ${s.y - s.r}px)`;
+            el.style.width = el.style.height = `${s.r * 2}px`;
+            let half = labelHalf.get(s.name);
+            if (half === undefined) {
+              half = ((el.firstElementChild as HTMLElement | null)?.offsetWidth ?? 0) / 2;
+              if (half) labelHalf.set(s.name, half);
+            }
+            const nudge = Math.min(0, viewWidth - EDGE - (s.x + half)) + Math.max(0, EDGE - (s.x - half));
+            el.style.setProperty('--nudge', `${Math.round(nudge)}px`);
           }
         };
+        document.fonts?.ready.then(() => labelHalf.clear());
         scene.current = made;
         made.start(still);
+        setMoving(!still);
         onReady();
         // nothing is drawn while the first screen is scrolled out of view
-        watcher = new IntersectionObserver(([entry]) => (entry.isIntersecting ? made.resume() : made.pause()));
+        watcher = new IntersectionObserver(([entry]) => (entry.isIntersecting && !held.current ? made.resume() : made.pause()));
         watcher.observe(canvas.current!);
         window.addEventListener('pointermove', onMove, { passive: true });
         window.addEventListener('resize', onResize);
         window.addEventListener('scroll', onScroll, { passive: true });
         document.addEventListener('visibilitychange', onVisible);
       } catch {
-        if (alive) setFailed(true);
+        if (alive) {
+          setFailed(true);
+          setMoving(!still);
+        }
       }
     })();
 
@@ -64,12 +94,36 @@ export function SceneCanvas({ onReady }: { onReady: () => void }) {
     };
   }, [onReady]);
 
+  const togglePause = () => {
+    held.current = !held.current;
+    setPaused(held.current);
+    if (held.current) {
+      scene.current?.pause();
+      fallback.current?.pause();
+    } else {
+      scene.current?.resume();
+      fallback.current?.play().catch(() => {});
+    }
+  };
+
+  const pause = moving && (
+    <button type="button" className="scene__pause" onClick={togglePause}>
+      {paused ? 'Play' : 'Pause'}
+    </button>
+  );
+
   if (failed) {
-    return <video className="scene__fallback" src="/sarxina-animated.mp4" autoPlay loop muted playsInline />;
+    return (
+      <>
+        <video ref={fallback} className="scene__fallback" src="/sarxina-animated.mp4" autoPlay loop muted playsInline />
+        {pause}
+      </>
+    );
   }
 
   return (
     <div className="scene">
+      {pause}
       <canvas ref={canvas} className="scene__canvas" onClick={() => scene.current?.poke()} aria-hidden="true" />
       {LINKS.map((link) => (
         <a

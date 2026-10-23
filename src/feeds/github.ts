@@ -18,10 +18,16 @@ function plain(markdown: string) {
     .trim();
 }
 
-// The first two sentences of a description, so that a long one stays one short paragraph on the shelf.
-function firstSentences(text: string, count = 2) {
-  const sentences = text.split(/(?<=[.!?])\s+(?=[A-Z"(])/);
-  return sentences.slice(0, count).join(' ');
+// The first sentence of a description, and the ones after it while the whole stays short, so each row of the shelf
+// stays a line or two. The full text is on the plugin's page.
+function shortBlurb(text: string, words = 24) {
+  const [first = '', ...rest] = text.split(/(?<=[.!?])\s+(?=[A-Z"(])/);
+  let blurb = first;
+  for (const next of rest) {
+    if ((blurb + ' ' + next).split(/\s+/).length > words) break;
+    blurb += ' ' + next;
+  }
+  return blurb;
 }
 
 export async function obsPlugins(repo: string): Promise<Tool[]> {
@@ -42,7 +48,7 @@ export async function obsPlugins(repo: string): Promise<Tool[]> {
 
   const named: { name: string; blurb: string; tag: string }[] = [];
   for (const [, name, does] of readme.matchAll(/^\|\s*\*\*(.+?)\*\*\s*\|[^|\r\n]*\|\s*(.*?)\s*\|\s*$/gm)) {
-    named.push({ name: name.trim(), blurb: firstSentences(plain(does)), tag: `${name.trim().toLowerCase().replace(/\s+/g, '-')}-v` });
+    named.push({ name: name.trim(), blurb: shortBlurb(plain(does)), tag: `${name.trim().toLowerCase().replace(/\s+/g, '-')}-v` });
   }
   // "## Name", a blank line, then the first line of text under it
   for (const [, name, blurb] of readme.matchAll(/^## (.+)\r?\n\s*\r?\n([^\r\n#!|].*)$/gm)) {

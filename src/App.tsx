@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { Fragment, useCallback, useEffect, useState } from 'react';
 import './App.css';
 import { CREDITS, LINKS, OBS_PLUGINS_REPO, SHORTS_PLAYLIST, TAGLINE, TOOLS, TWITCH_ID, TWITCH_LOGIN, TWITCH_URL, VIDEOS_PLAYLIST } from './data/site';
 import { obsPlugins, type Tool } from './feeds/github';
@@ -150,57 +150,67 @@ export function App() {
       </header>
 
       <main className="below">
-        <section id="videos" className="block">
-          <h2>Latest videos</h2>
-          <div className="videos">
-            <iframe
-              className="videos__long"
-              title="Sarxina's latest video"
-              src={`https://www.youtube-nocookie.com/embed/videoseries?list=${VIDEOS_PLAYLIST}`}
-              loading="lazy"
-              allow="accelerometer; encrypted-media; gyroscope; picture-in-picture; web-share"
-              allowFullScreen
-            />
-            <iframe
-              className="videos__short"
-              title="Sarxina's latest Short"
-              src={`https://www.youtube-nocookie.com/embed/videoseries?list=${SHORTS_PLAYLIST}`}
-              loading="lazy"
-              allow="accelerometer; encrypted-media; gyroscope; picture-in-picture; web-share"
-              allowFullScreen
-            />
+        <section id="videos" className="block block--videos">
+          <div className="container">
+            <h2>Latest videos</h2>
+            <div className="videos">
+              <iframe
+                className="videos__long"
+                title="Sarxina's latest video"
+                src={`https://www.youtube-nocookie.com/embed/videoseries?list=${VIDEOS_PLAYLIST}`}
+                loading="lazy"
+                allow="accelerometer; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowFullScreen
+              />
+              <iframe
+                className="videos__short"
+                title="Sarxina's latest Short"
+                src={`https://www.youtube-nocookie.com/embed/videoseries?list=${SHORTS_PLAYLIST}`}
+                loading="lazy"
+                allow="accelerometer; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowFullScreen
+              />
+            </div>
           </div>
         </section>
 
-        <section id="tools" className="block">
-          <h2>Things I made that you can use</h2>
-          <div className="tools">
-            {[...plugins, ...TOOLS].map((tool) => (
-              <a key={tool.name} className="tool" href={tool.url} target="_blank" rel="noreferrer">
-                <span className="tool__kind">{tool.kind}</span>
-                <strong className="tool__name">{tool.name}</strong>
-                {tool.blurb && <span className="tool__blurb">{tool.blurb}</span>}
-                <span className="tool__action">{tool.action}</span>
-              </a>
-            ))}
+        <section id="tools" className="block block--tools">
+          <div className="container split">
+            <h2>Things I made that you can use</h2>
+            <div className="tools">
+              {[...plugins, ...TOOLS].map((tool) => (
+                <a key={tool.name} className="tool" href={tool.url} target="_blank" rel="noreferrer">
+                  <strong className="tool__name">{tool.name}</strong>
+                  <span className="tool__kind">{tool.kind}</span>
+                  {tool.blurb && <span className="tool__blurb">{tool.blurb}</span>}
+                  <span className="tool__action">{tool.action}</span>
+                </a>
+              ))}
+            </div>
           </div>
-        </section>
-
-        <section className="block block--credits">
-          <h2>Credits</h2>
-          <dl className="credits">
-            {CREDITS.map(([role, name]) => (
-              <div key={role}>
-                <dt>{role}</dt>
-                <dd>{name}</dd>
-              </div>
-            ))}
-          </dl>
         </section>
 
         <footer className="foot">
-          <a href="/privacy/">Privacy Policy</a>
-          <a href="/terms/">Terms of Service</a>
+          <div className="container split">
+            <h2>Credits</h2>
+            <div className="colophon">
+              <dl className="credits">
+                {CREDITS.map(([role, name], i) => (
+                  <Fragment key={role}>
+                    {i > 0 && ' '}
+                    <div>
+                      <dt>{role}</dt>
+                      <dd>{name}</dd>
+                    </div>
+                  </Fragment>
+                ))}
+              </dl>
+              <div className="foot__links">
+                <a href="/privacy/">Privacy Policy</a>
+                <a href="/terms/">Terms of Service</a>
+              </div>
+            </div>
+          </div>
         </footer>
       </main>
     </>

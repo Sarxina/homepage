@@ -1,49 +1,9 @@
-:root {
-  --night: #0d1130;
-  --navy: #151b40;
-  --panel: rgba(18, 23, 56, 0.74);
-  --line: rgba(224, 185, 137, 0.42);
-  --gold: #e6c08c;
-  --gold-bright: #ffd98a;
-  --ink: #f6f2ea;
-  --muted: rgba(246, 242, 234, 0.66);
+/* Hallmark · redesign: full below the fold, the first screen kept · shape: Marquee Hero · genre: atmospheric · theme: brand (the library's night, its page white, the gold of his trims) · posture: committed · job: listen · hero: Poster (kept) · nav: none, the lower third is the links · footer: colophon · signature: the living library illustration
+ * axes: Bottom-aligned|Asymmetric spans|Bleed-colour block|Solid|Full-bleed|None · contrast: pass · fold: pass · v2.0.0 */
+/* Hallmark · pre-emit critique: P4 H4 E4 S4 R4 V4 · weakest: S, the sections below the fold were a generic card template; the shelf is now an index of rows and the credits a book colophon, both in the archive's own voice */
+/* Hallmark · waive 29 · a dark offset shadow under the wordmark keeps SARXINA legible over the moving illustration, never a coloured glow */
+/* Hallmark · answered F4 · Twitch is the one filled control on the page; the other four links stay quiet */
+/* Hallmark · finish-review: subagent · fix · 5 findings · 5 resolved (shelf rows rebalanced, credits merged into the footer, book labels kept on screen, live card sized, the Short full width on a phone) · the old page's platform colours kept, on the icons */
 
-  color-scheme: dark;
-  font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-}
-
-html {
-  scroll-behavior: smooth;
-}
-
-html,
-body {
-  margin: 0;
-  padding: 0;
-  background: var(--night);
-  color: var(--ink);
-}
-
-a {
-  color: inherit;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-behavior: auto;
-  }
-  *,
-  *::before,
-  *::after {
-    animation: none !important;
-    transition: none !important;
-  }
-}
+@import './tokens.css';
+@import './base.css';
