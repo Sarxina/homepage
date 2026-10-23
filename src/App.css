@@ -99,32 +99,6 @@
   outline-offset: 2px;
 }
 
-/* the illustration keeps moving: one quiet control holds it still */
-.scene__pause {
-  position: absolute;
-  z-index: 3;
-  top: var(--space-md);
-  right: var(--space-md);
-  min-height: 36px;
-  padding: 0 var(--space-md);
-  border: var(--rule-hair) solid var(--color-rule);
-  border-radius: var(--radius-pill);
-  background: var(--color-paper-2);
-  color: var(--color-ink-2);
-  font-size: var(--text-sm);
-  cursor: pointer;
-  transition: background-color var(--dur-short) var(--ease-out), color var(--dur-short) var(--ease-out);
-}
-
-.scene__pause:hover {
-  background: var(--color-paper-3);
-  color: var(--color-ink);
-}
-
-.scene__pause:active {
-  background: var(--color-paper);
-}
-
 /* only the foot of the illustration darkens, under his name and the links */
 .hero__shade {
   position: absolute;
