@@ -1,7 +1,7 @@
 import { siInstagram, siTiktok, siTwitch, siX, siYoutube } from 'simple-icons';
 import type { Tool } from '../feeds/github';
 
-export const TAGLINE = 'Librarian of the Celestial Archives';
+export const TAGLINE = { lead: 'Librarian of the', title: 'Celestial Archives' };
 
 export type SiteLink = {
   id: string;

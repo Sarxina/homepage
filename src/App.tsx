@@ -136,7 +136,10 @@ export function App() {
         <div className="hero__panel">
           <div className="hero__title">
             <h1 className="wordmark">Sarxina</h1>
-            <p className="tagline">{TAGLINE}</p>
+            <p className="tagline">
+              <span className="tagline__lead">{TAGLINE.lead}</span>{' '}
+              <span className="tagline__title">{TAGLINE.title}</span>
+            </p>
           </div>
           <StreamStatus />
           <nav className="dock" aria-label="Where to find me">
