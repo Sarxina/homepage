@@ -1,7 +1,7 @@
 import { Fragment, useCallback, useEffect, useState } from 'react';
 import './App.css';
-import { CREDITS, LINKS, OBS_PLUGINS_REPO, SHORTS_PLAYLIST, TAGLINE, TOOLS, TWITCH_ID, TWITCH_LOGIN, TWITCH_URL, VIDEOS_PLAYLIST } from './data/site';
-import { obsPlugins, type Tool } from './feeds/github';
+import { CREDITS, LINKS, OBS_PLUGINS_REPO, PLUGIN_MANAGER, SHORTS_PLAYLIST, TAGLINE, TOOLS, TWITCH_ID, TWITCH_LOGIN, TWITCH_URL, VIDEOS_PLAYLIST } from './data/site';
+import { obsPlugins, type Plugin, type Tool } from './feeds/github';
 import { nextStream, type Stream } from './feeds/twitch';
 import { SceneCanvas } from './scene/SceneCanvas';
 
@@ -52,24 +52,29 @@ function useNextStream() {
   return stream;
 }
 
-/** the OBS plugins from their repository; empty until they are in */
+/** the OBS plugins from their repository; empty until they are in, or when they could not be read */
 function useObsPlugins() {
-  const [plugins, setPlugins] = useState<Tool[]>([]);
+  const [plugins, setPlugins] = useState<Plugin[]>([]);
   useEffect(() => {
     let alive = true;
     obsPlugins(OBS_PLUGINS_REPO)
       .then((found) => alive && setPlugins(found))
-      .catch(() =>
-        alive &&
-        setPlugins([
-          { name: 'OBS plugins', kind: 'OBS plugins', blurb: '', url: `https://github.com/${OBS_PLUGINS_REPO}`, action: 'See them all' },
-        ]),
-      );
+      .catch(() => alive && setPlugins([]));
     return () => {
       alive = false;
     };
   }, []);
   return plugins;
+}
+
+/**
+ * The shelf: the Plugin Manager with how many plugins it has, the one plugin released most recently, then the other
+ * tools. However many plugins there are, the shelf stays this long.
+ */
+function shelf(plugins: Plugin[]): Tool[] {
+  const manager = { ...PLUGIN_MANAGER, blurb: `${PLUGIN_MANAGER.blurb}${plugins.length ? `, ${plugins.length} so far` : ''}.` };
+  const newest = plugins.reduce<Plugin | null>((latest, p) => (!latest || p.released > latest.released ? p : latest), null);
+  return [manager, ...(newest ? [{ ...newest, kind: 'Newest plugin' }] : []), ...TOOLS];
 }
 
 function countdown(ms: number) {
@@ -178,7 +183,7 @@ export function App() {
           <div className="container split">
             <h2>Things I made that you can use</h2>
             <div className="tools">
-              {[...plugins, ...TOOLS].map((tool) => (
+              {shelf(plugins).map((tool) => (
                 <a key={tool.name} className="tool" href={tool.url} target="_blank" rel="noreferrer">
                   <strong className="tool__name">{tool.name}</strong>
                   <span className="tool__kind">{tool.kind}</span>

@@ -8,7 +8,10 @@
 
 export type Tool = { name: string; kind: string; blurb: string; url: string; action: string };
 
-type Release = { tag_name: string; html_url: string; draft: boolean; prerelease: boolean };
+/** a plugin with a release, and when its newest release came out */
+export type Plugin = Tool & { released: number };
+
+type Release = { tag_name: string; html_url: string; draft: boolean; prerelease: boolean; published_at: string };
 
 // A table cell as plain text: no bold, code or link markup.
 function plain(markdown: string) {
@@ -30,7 +33,7 @@ function shortBlurb(text: string, words = 24) {
   return blurb;
 }
 
-export async function obsPlugins(repo: string): Promise<Tool[]> {
+export async function obsPlugins(repo: string): Promise<Plugin[]> {
   const [readme, releases] = await Promise.all([
     fetch(`https://raw.githubusercontent.com/${repo}/HEAD/README.md`).then((r) => {
       if (!r.ok) throw new Error(`README: ${r.status}`);
@@ -55,11 +58,13 @@ export async function obsPlugins(repo: string): Promise<Tool[]> {
     named.push({ name: name.trim(), blurb: plain(blurb), tag: `${name.trim().toLowerCase()}-v` });
   }
 
-  const plugins: Tool[] = [];
+  const plugins: Plugin[] = [];
   for (const { name, blurb, tag } of named) {
     if (plugins.some((p) => p.name.toLowerCase() === name.toLowerCase())) continue;
     const release = newest(tag);
-    if (release) plugins.push({ name, kind: 'OBS plugin', blurb, url: release.html_url, action: 'Download' });
+    if (release) {
+      plugins.push({ name, kind: 'OBS plugin', blurb, url: release.html_url, action: 'Download', released: Date.parse(release.published_at) });
+    }
   }
   return plugins;
 }

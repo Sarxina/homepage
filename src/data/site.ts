@@ -31,15 +31,18 @@ export const SHORTS_PLAYLIST = 'UUSHrkGtXHU44ZI-dR2tg9rJtQ';
 // The OBS plugins come from this repository: one card per README section that has a release.
 export const OBS_PLUGINS_REPO = 'Sarxina/sarxina-obs-plugins';
 
-// The other things on the shelf, after the OBS plugins.
+// The shelf leads with the Plugin Manager, the one install for every plugin. How many plugins it has comes from the
+// plugins repository, so the count is added to this line on the page.
+export const PLUGIN_MANAGER: Tool = {
+  name: 'Plugin Manager',
+  kind: 'App',
+  blurb: 'One install for every plugin I make',
+  url: '/pluginmanager',
+  action: 'Download',
+};
+
+// The other things on the shelf, after the Plugin Manager and the newest plugin.
 export const TOOLS: Tool[] = [
-  {
-    name: 'Plugin Manager',
-    kind: 'App',
-    blurb: 'One place to install and run my VTuber toys.',
-    url: '/pluginmanager',
-    action: 'Download',
-  },
   {
     name: 'Random VTuber Toys',
     kind: 'Toys for your model',
