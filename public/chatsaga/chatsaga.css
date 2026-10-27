@@ -1,0 +1,203 @@
+/* ChatSaga page: the title over a plain shot of the town, the setup steps, then how to play. Built to the frontend-design skill (.claude/skills/frontend-design): the steps are set in the
+   game's own message window, the panel ChatSaga draws in OBS (Status.js: #1c1a2e fill, #e8e4f5 border, 12px corners),
+   with the step number in a name box the way a speaker's name sits on an RPG dialogue box. Type is M PLUS 1p, the
+   family RPG Maker's own window text comes from. Everything else stays quiet. */
+
+:root {
+  --night: #0f1330;
+  --window: #1c1a2e;
+  --window-edge: #e8e4f5;
+  --ink: #f4f1e8;
+  --ink-soft: #c9c6d9;
+  --gold: #e7c98a;
+  --rule: #2a3166;
+
+  --font: "M PLUS 1p", "Hiragino Sans", "Segoe UI", system-ui, sans-serif;
+
+  --step-gap: clamp(64px, 9vw, 120px);
+  --gutter: clamp(16px, 5vw, 72px);
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html, body { overflow-x: clip; }
+
+body {
+  margin: 0;
+  background: var(--night);
+  color: var(--ink);
+  font-family: var(--font);
+  font-size: 18px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+img { display: block; max-width: 100%; height: auto; }
+
+a { color: var(--gold); text-underline-offset: 0.18em; text-decoration-thickness: 1px; }
+a:hover { color: var(--ink); }
+a:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; border-radius: 2px; }
+
+.page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: clamp(48px, 8vw, 104px) var(--gutter) clamp(80px, 10vw, 140px);
+}
+
+h1, h2 {
+  margin: 0;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+
+h1 { font-size: clamp(3.25rem, 8vw + 1rem, 7rem); }
+
+h2 {
+  margin-bottom: clamp(48px, 7vw, 88px);
+  font-size: clamp(2.5rem, 5vw + 1rem, 4.75rem);
+}
+
+.title { margin-bottom: clamp(88px, 12vw, 160px); }
+
+.title__line {
+  margin: 16px 0 clamp(32px, 4vw, 48px);
+  color: var(--ink-soft);
+  font-size: clamp(1.15rem, 0.6vw + 1rem, 1.4rem);
+}
+
+.title__shot { margin: 0; }
+.title__shot img { width: 100%; border: 3px solid var(--window-edge); border-radius: 12px; }
+
+.part + .part { margin-top: clamp(104px, 13vw, 176px); }
+
+.steps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: var(--step-gap);
+}
+
+.step {
+  display: grid;
+  grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+  align-items: center;
+  gap: clamp(32px, 5vw, 72px);
+}
+
+.step--flip { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); }
+.step--flip .shot { order: 2; }
+
+/* The screenshot, as captured: no card around it, a hairline so dark UI doesn't melt into the page. */
+.shot { margin: 0; justify-self: center; }
+.shot img { border: 1px solid var(--rule); border-radius: 6px; }
+.shot--wide { justify-self: stretch; }
+.shot--wide img { width: 100%; }
+
+/* The message window, with its name box. */
+.window {
+  position: relative;
+  margin-top: 22px;
+  padding: 36px 32px 28px;
+  background: var(--window);
+  border: 3px solid var(--window-edge);
+  border-radius: 12px;
+}
+
+.window__name {
+  position: absolute;
+  top: -22px;
+  left: 20px;
+  margin: 0;
+  padding: 4px 16px;
+  background: var(--window);
+  border: 3px solid var(--window-edge);
+  border-radius: 10px;
+  font-size: 0.95rem;
+  font-weight: 800;
+  line-height: 1.4;
+}
+
+.window h3 {
+  margin: 0 0 10px;
+  font-size: clamp(1.35rem, 1vw + 1rem, 1.7rem);
+  font-weight: 800;
+  line-height: 1.25;
+}
+
+.window p {
+  margin: 0;
+  color: var(--ink-soft);
+  max-width: 40ch;
+}
+
+.window p + p { margin-top: 12px; }
+
+.step--single { grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); }
+.step--single .window { grid-column: 1 / -1; max-width: 860px; }
+
+.commands {
+  width: 100%;
+  margin-top: 18px;
+  border-collapse: collapse;
+}
+
+.commands th {
+  padding: 0 16px 10px 0;
+  text-align: left;
+  font-size: 0.9rem;
+  font-weight: 800;
+  color: var(--ink-soft);
+  border-bottom: 2px solid var(--window-edge);
+}
+
+.commands td {
+  padding: 14px 16px 14px 0;
+  vertical-align: top;
+  color: var(--ink-soft);
+  border-bottom: 1px solid var(--rule);
+}
+
+.commands td:first-child { white-space: nowrap; }
+
+.window .classes {
+  margin-top: 16px;
+  max-width: none;
+  font-size: 0.95rem;
+}
+
+code {
+  font-family: "M PLUS 1 Code", ui-monospace, Consolas, monospace;
+  font-size: 0.92em;
+  color: var(--gold);
+}
+
+.commands td:first-child code { font-size: 1.02rem; }
+
+kbd {
+  font-family: var(--font);
+  font-size: 0.85em;
+  padding: 1px 7px;
+  border: 1px solid var(--ink-soft);
+  border-bottom-width: 2px;
+  border-radius: 5px;
+  color: var(--ink);
+}
+
+@media (max-width: 52rem) {
+  .step,
+  .step--flip,
+  .step--single { grid-template-columns: minmax(0, 1fr); gap: 28px; }
+  .step--flip .shot { order: 0; }
+  .shot { justify-self: stretch; }
+  .shot img { margin-inline: auto; }
+  .window { padding: 32px 22px 22px; }
+
+  /* the table becomes one block per command, so nothing scrolls sideways */
+  .commands thead { display: none; }
+  .commands, .commands tbody, .commands tr, .commands td { display: block; width: 100%; }
+  .commands tr { padding: 14px 0; border-bottom: 1px solid var(--rule); }
+  .commands td { padding: 0; border: 0; }
+  .commands td:first-child { white-space: normal; margin-bottom: 6px; }
+}

@@ -1,6 +1,6 @@
 import { Fragment, useCallback, useEffect, useState } from 'react';
 import './App.css';
-import { CREDITS, LINKS, OBS_PLUGINS_REPO, PLUGIN_MANAGER, SHORTS_PLAYLIST, TAGLINE, TOOLS, TWITCH_ID, TWITCH_LOGIN, TWITCH_URL, VIDEOS_PLAYLIST } from './data/site';
+import { CREDITS, LINKS, OBS_PLUGINS_REPO, PLUGIN_GUIDES, PLUGIN_MANAGER, SHORTS_PLAYLIST, TAGLINE, TOOLS, TWITCH_ID, TWITCH_LOGIN, TWITCH_URL, VIDEOS_PLAYLIST } from './data/site';
 import { obsPlugins, type Plugin, type Tool } from './feeds/github';
 import { nextStream, type Stream } from './feeds/twitch';
 import { SceneCanvas } from './scene/SceneCanvas';
@@ -68,13 +68,15 @@ function useObsPlugins() {
 }
 
 /**
- * The shelf: the Plugin Manager with how many plugins it has, the one plugin released most recently, then the other
- * tools. However many plugins there are, the shelf stays this long.
+ * The shelf: the Plugin Manager with how many plugins it has, the one plugin released most recently (opening its guide
+ * when it has one), then the other tools. However many plugins there are, the shelf stays this long.
  */
 function shelf(plugins: Plugin[]): Tool[] {
   const manager = { ...PLUGIN_MANAGER, blurb: `${PLUGIN_MANAGER.blurb}${plugins.length ? `, ${plugins.length} so far` : ''}.` };
   const newest = plugins.reduce<Plugin | null>((latest, p) => (!latest || p.released > latest.released ? p : latest), null);
-  return [manager, ...(newest ? [{ ...newest, kind: 'Newest plugin' }] : []), ...TOOLS];
+  const guide = newest && PLUGIN_GUIDES[newest.name];
+  const newestCard = newest && { ...newest, kind: 'Newest plugin', ...(guide ? { url: guide, action: 'How to set it up' } : {}) };
+  return [manager, ...(newestCard ? [newestCard] : []), ...TOOLS];
 }
 
 function countdown(ms: number) {

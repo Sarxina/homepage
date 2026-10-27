@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="ChatSaga puts your Twitch chat in an RPG town on your stream. How to set it up in OBS, move around, form a party, and the chat commands." />
+    <title>ChatSaga | Sarxina</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=M+PLUS+1+Code:wght@500&family=M+PLUS+1p:wght@400;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/chatsaga/chatsaga.css" />
+  </head>
+  <body>
+    <main class="page">
+      <header class="title">
+        <h1>ChatSaga</h1>
+        <p class="title__line">Your Twitch chat as an RPG town on your stream.</p>
+        <figure class="title__shot">
+          <img src="/chatsaga/town.webp" width="1280" height="720" alt="The ChatSaga town, full of chatters walking around with their names over their heads" fetchpriority="high" />
+        </figure>
+      </header>
+
+      <section class="part" aria-labelledby="setting-up">
+      <h2 id="setting-up">Setting up</h2>
+      <ol class="steps">
+        <li class="step">
+          <figure class="shot shot--wide">
+            <img src="/chatsaga/step-1-release.webp" width="1216" height="422" alt="The Sarxina OBS Plugin Manager’s latest release on GitHub, with its zip under Assets" loading="lazy" />
+          </figure>
+          <div class="window">
+            <p class="window__name">Step 1</p>
+            <h3>Install the Sarxina OBS Plugin Manager</h3>
+            <p>Close OBS, download the manager from <a href="https://github.com/Sarxina/sarxina-obs-plugins/releases/latest">its latest release</a> and unzip it into your OBS folder.</p>
+            <p>Then open OBS and tick it in the Docks menu.</p>
+          </div>
+        </li>
+        <li class="step step--flip">
+          <figure class="shot">
+            <img src="/chatsaga/step-2-install.webp" width="291" height="387" alt="The plugin list in the manager’s dock, with an Install button next to ChatSaga" loading="lazy" />
+          </figure>
+          <div class="window">
+            <p class="window__name">Step 2</p>
+            <h3>Install ChatSaga</h3>
+            <p>In the manager’s dock, open Choose plugins and press Install next to ChatSaga. Then restart OBS.</p>
+          </div>
+        </li>
+        <li class="step">
+          <figure class="shot">
+            <img src="/chatsaga/step-3-twitch.webp" width="570" height="196" alt="The dock’s Connections box, with Twitch not connected and a Connect button" loading="lazy" />
+          </figure>
+          <div class="window">
+            <p class="window__name">Step 3</p>
+            <h3>Connect Twitch</h3>
+            <p>Press Connect next to Twitch. On twitch.tv/activate, enter the code shown in the dock.</p>
+          </div>
+        </li>
+        <li class="step step--flip">
+          <figure class="shot">
+            <img src="/chatsaga/step-4-sources.webp" width="291" height="242" alt="OBS’s right-click menu on the Sources list, with Sarxina Source at the bottom" loading="lazy" />
+          </figure>
+          <div class="window">
+            <p class="window__name">Step 4</p>
+            <h3>Add the town</h3>
+            <p>Right-click the Sources list and choose Sarxina Source, then ChatSaga.</p>
+          </div>
+        </li>
+        <li class="step">
+          <figure class="shot shot--wide">
+            <img src="/chatsaga/step-5-town.webp" width="1168" height="728" alt="The ChatSaga town, full of chatters, in OBS’s preview" loading="lazy" />
+          </figure>
+          <div class="window">
+            <p class="window__name">Step 5</p>
+            <h3>Walk around</h3>
+            <p>Right-click the ChatSaga source and choose Interact. Walk around with the arrow keys, and press <kbd>Enter</kbd> to talk to whoever you’re facing.</p>
+            <p>Alternatively, play in the browser at <a href="http://127.0.0.1:4790/">http://127.0.0.1:4790/</a></p>
+          </div>
+        </li>
+      </ol>
+      </section>
+
+      <section class="part" aria-labelledby="playing">
+        <h2 id="playing">Playing</h2>
+        <div class="steps">
+          <div class="step">
+            <figure class="shot shot--wide">
+              <img src="/chatsaga/play-talk.webp" width="1280" height="720" alt="Talking to a chatter in town: their avatar and last message, with Recruit, View stats and Close" loading="lazy" />
+            </figure>
+            <div class="window">
+              <p class="window__name">Moving</p>
+              <p>Walk around with the arrow keys.</p>
+              <p>Press <kbd>Enter</kbd>, <kbd>Space</kbd> or <kbd>Z</kbd> to talk to whoever you’re facing.</p>
+              <p>Press <kbd>Esc</kbd> to open the menu.</p>
+              <p>In OBS, do all of this through Interact. In the browser, click the page first.</p>
+            </div>
+          </div>
+          <div class="step step--flip">
+            <figure class="shot">
+              <img src="/chatsaga/play-party.webp" width="680" height="640" alt="Four chatters walking in a line behind the player, their names over their heads" loading="lazy" />
+            </figure>
+            <div class="window">
+              <p class="window__name">Your party</p>
+              <p>Talk to a chatter and choose Recruit. Up to four chatters can follow you, each with their class’s starting weapon. Lurkers can join too.</p>
+              <p>Anyone out of the stream for two hours leaves the party. To send someone home yourself, open the menu and choose Dismiss. Choose Status to see each member’s level, HP and stats.</p>
+            </div>
+          </div>
+          <div class="step step--single">
+            <div class="window">
+              <p class="window__name">Chat commands</p>
+              <p>Your chatters type these in Twitch chat.</p>
+              <table class="commands">
+                <thead>
+                  <tr><th scope="col">Type</th><th scope="col">To</th></tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><code>!chatsaga status</code></td>
+                    <td>See your status panel on stream for a few seconds. Nothing is posted in chat.</td>
+                  </tr>
+                  <tr>
+                    <td><code>!chatsaga changeclass &lt;class&gt;</code></td>
+                    <td>Switch to that class, for example <code>!chatsaga changeclass knight</code></td>
+                  </tr>
+                </tbody>
+              </table>
+              <p class="classes">Classes: Swordsman, Sorcerer, Priest, Knight, Martial Artist, Magic Swordsman, Hunter, Bandit.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>

@@ -31,6 +31,11 @@ export const SHORTS_PLAYLIST = 'UUSHrkGtXHU44ZI-dR2tg9rJtQ';
 // The OBS plugins come from this repository: one card per README section that has a release.
 export const OBS_PLUGINS_REPO = 'Sarxina/sarxina-obs-plugins';
 
+// Plugins with a guide on this site: their card opens the guide (which links the download) instead of the release.
+export const PLUGIN_GUIDES: Record<string, string> = {
+  ChatSaga: '/chatsaga/',
+};
+
 // The shelf leads with the Plugin Manager, the one install for every plugin. How many plugins it has comes from the
 // plugins repository, so the count is added to this line on the page.
 export const PLUGIN_MANAGER: Tool = {
