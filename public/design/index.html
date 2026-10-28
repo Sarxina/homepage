@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0d1130" />
+    <meta name="description" content="Sarxina's design sheet, by Wanilmith." />
+    <title>Design sheet | Sarxina</title>
+    <meta property="og:title" content="Sarxina's design sheet" />
+    <meta property="og:description" content="Art and design by Wanilmith." />
+    <meta property="og:image" content="https://sarxina.com/design/og.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:url" content="https://sarxina.com/design/" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,500&family=Hanken+Grotesk:wght@400;600&display=swap" rel="stylesheet" />
+    <style>
+      /* The design sheet page. The sheet itself is the page: it sits in the same gold double rule the sheet draws around
+         its own art, and the palette repeats the sheet's diamond swatches at a size you can read a hex off. Colors and
+         type are the site's own tokens (src/tokens.css). */
+      :root {
+        color-scheme: dark;
+        --color-paper: oklch(19.5% 0.061 274); --color-paper-2: oklch(23.5% 0.068 274);
+        --color-ink: oklch(96.2% 0.011 85); --color-ink-2: oklch(87% 0.022 80); --color-muted: oklch(76% 0.04 274);
+        --color-accent: oklch(82.9% 0.08 75); --color-rule-trim: oklch(44% 0.06 75); --color-focus: oklch(90.1% 0.106 85);
+        --font-display: "Bodoni Moda", "Didot", Georgia, serif; --font-body: "Hanken Grotesk", ui-sans-serif, system-ui, sans-serif;
+        --gutter: clamp(16px, 4vw, 64px);
+      }
+      *, *::before, *::after { box-sizing: border-box; }
+      html, body { overflow-x: clip; }
+      body {
+        margin: 0;
+        background: var(--color-paper);
+        color: var(--color-ink);
+        font-family: var(--font-body);
+        line-height: 1.65;
+        -webkit-font-smoothing: antialiased;
+      }
+      img { display: block; max-width: 100%; height: auto; }
+      a { color: var(--color-accent); text-underline-offset: 0.18em; text-decoration-thickness: 1px; }
+      a:hover { color: var(--color-ink); }
+      :focus-visible { outline: 2px solid var(--color-focus); outline-offset: 3px; }
+
+      main { max-width: 1440px; margin: 0 auto; padding: clamp(40px, 6vw, 88px) var(--gutter) clamp(72px, 9vw, 128px); }
+
+      .head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 8px 32px; margin-bottom: clamp(24px, 3vw, 40px); }
+      h1 { margin: 0; font-family: var(--font-display); font-weight: 500; font-size: clamp(2.5rem, 4.5vw + 1rem, 4.75rem); line-height: 1; letter-spacing: -0.01em; }
+      .head p { margin: 0; color: var(--color-ink-2); }
+
+      /* The sheet, in the sheet's own frame: a hair rule, a gap, a second rule. */
+      .sheet { margin: 0; padding: 6px; border: 1px solid var(--color-rule-trim); }
+      .sheet a { display: block; border: 1px solid var(--color-accent); }
+      .sheet img { width: 100%; }
+      .sheet figcaption { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 4px 24px; padding: 14px 4px 4px; color: var(--color-muted); font-size: 0.9375rem; }
+
+      h2 { margin: clamp(64px, 8vw, 112px) 0 clamp(24px, 3vw, 40px); font-family: var(--font-display); font-weight: 500; font-size: clamp(2rem, 2.5vw + 1rem, 3rem); line-height: 1.05; }
+
+      .palette { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: clamp(8px, 1.6vw, 24px); }
+      .swatch {
+        width: 100%; padding: 0; border: 0; background: none; color: var(--color-ink); font: inherit; cursor: pointer;
+        display: grid; justify-items: center; gap: 14px;
+      }
+      .swatch__chip {
+        width: 70%; aspect-ratio: 1; transform: rotate(45deg); margin: 15% 0 12%;
+        background: var(--c); outline: 1px solid var(--color-rule-trim); outline-offset: 4px;
+        transition: outline-color var(--dur, 160ms) ease-out;
+      }
+      .swatch:hover .swatch__chip { outline-color: var(--color-accent); }
+      .swatch__hex { font-size: clamp(0.8125rem, 0.4vw + 0.7rem, 1rem); font-variant-numeric: tabular-nums; letter-spacing: 0.02em; }
+      .swatch[data-copied] .swatch__hex { color: var(--color-accent); }
+
+      footer { margin-top: clamp(64px, 8vw, 112px); padding-top: 20px; border-top: 1px solid var(--color-rule-trim); color: var(--color-muted); font-size: 0.9375rem; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 24px; }
+
+      @media (max-width: 640px) {
+        .palette { grid-template-columns: repeat(4, minmax(0, 1fr)); row-gap: 28px; }
+      }
+      @media (prefers-reduced-motion: reduce) { .swatch__chip { transition: none; } }
+    </style>
+  </head>
+  <body>
+    <main>
+      <header class="head">
+        <h1>Sarxina’s design sheet</h1>
+        <p>Art and design by Wanilmith</p>
+      </header>
+
+      <figure class="sheet">
+        <a href="/design/sarxina-design-sheet.jpg">
+          <img src="/design/sheet-1400.webp" srcset="/design/sheet-1400.webp 1400w, /design/sheet-2400.webp 2400w" sizes="(max-width: 1440px) 100vw, 1440px" width="2400" height="1581" alt="Sarxina's design sheet: the full outfit with the coat on, front and back without the coat, the coat on its own, close-ups of the earrings, bracelet and nails, and the color palette" fetchpriority="high" />
+        </a>
+        <figcaption>
+          <a href="/design/sarxina-design-sheet.jpg" download>Download full size (6300 × 4150)</a>
+        </figcaption>
+      </figure>
+
+      <h2 id="palette">Palette</h2>
+      <ul class="palette" aria-labelledby="palette">
+        <li><button class="swatch" type="button" style="--c:#f1dabd" data-hex="#F1DABD"><span class="swatch__chip"></span><span class="swatch__hex">#F1DABD</span></button></li>
+        <li><button class="swatch" type="button" style="--c:#e0b989" data-hex="#E0B989"><span class="swatch__chip"></span><span class="swatch__hex">#E0B989</span></button></li>
+        <li><button class="swatch" type="button" style="--c:#a4bdfc" data-hex="#A4BDFC"><span class="swatch__chip"></span><span class="swatch__hex">#A4BDFC</span></button></li>
+        <li><button class="swatch" type="button" style="--c:#8094bc" data-hex="#8094BC"><span class="swatch__chip"></span><span class="swatch__hex">#8094BC</span></button></li>
+        <li><button class="swatch" type="button" style="--c:#6b52a8" data-hex="#6B52A8"><span class="swatch__chip"></span><span class="swatch__hex">#6B52A8</span></button></li>
+        <li><button class="swatch" type="button" style="--c:#413d79" data-hex="#413D79"><span class="swatch__chip"></span><span class="swatch__hex">#413D79</span></button></li>
+        <li><button class="swatch" type="button" style="--c:#2a344d" data-hex="#2A344D"><span class="swatch__chip"></span><span class="swatch__hex">#2A344D</span></button></li>
+      </ul>
+
+      <footer>
+        <span>Sarxina, Librarian of the Celestial Archives</span>
+        <a href="/">sarxina.com</a>
+      </footer>
+    </main>
+    <script>
+      // Copy a swatch's hex code and show "Copied" in its place for a moment.
+      document.querySelectorAll('.swatch').forEach((b) => {
+        b.addEventListener('click', async () => {
+          const hex = b.dataset.hex, label = b.querySelector('.swatch__hex');
+          try { await navigator.clipboard.writeText(hex); } catch { return; }
+          label.textContent = 'Copied';
+          b.setAttribute('data-copied', '');
+          setTimeout(() => { label.textContent = hex; b.removeAttribute('data-copied'); }, 1400);
+        });
+      });
+    </script>
+  </body>
+</html>
