@@ -1,0 +1,161 @@
+/* Every VTuber gacha: the stream overlay (OBS browser source, 1920x1080, transparent). Same machine and palette as the
+   viewer page (style.css); everything here sits in one 1920x1080 box so it can be laid over a stream layout. */
+:root {
+  --gold: #e6c08c; --gold-bright: #ffd98a; --gold-deep: #b8894e; --ink: #f6f2ea; --navy: #151b40; --twitch: #9146ff;
+  --c-dead: #9aa3b8; --c-r: #8fa6e8; --c-sr: #c9a8ff; --c-ssr: #ffd98a; --c-ur: #ff9ad5;
+  font-family: 'Fredoka', 'Inter', system-ui, sans-serif; -webkit-font-smoothing: antialiased; color-scheme: dark;
+}
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; background: transparent; overflow: hidden; }
+[hidden] { display: none !important; }
+.pts-icon { width: 1em; height: 1em; flex: none; }
+
+.ov { position: relative; width: 1920px; height: 1080px; overflow: hidden; color: var(--ink); }
+.ov * { pointer-events: none; }
+
+/* ---------- the machine (the viewer page's, with this pool's plaque) ---------- */
+.ov-machine { position: absolute; left: 855px; top: 105px; width: 400px; height: 600px; z-index: 3; }
+.ov-machine__in { position: absolute; inset: 0; transform-origin: 50% 100%; }
+.ov-machine.is-in .ov-machine__in { animation: ovMachineIn .78s linear both; }
+@keyframes ovMachineIn { 0% { transform: translateY(70px) scale(.45, .2); opacity: 0; } 30% { transform: translateY(-26px) scale(.82, 1.22); opacity: 1; } 50% { transform: translateY(0) scale(1.16, .84); } 66% { transform: scale(.94, 1.07); } 80% { transform: scale(1.03, .97); } 91% { transform: scale(.99, 1.01); } 100% { transform: none; opacity: 1; } }
+.machine__halo {
+  position: absolute; left: 50%; top: 32%; width: 130%; aspect-ratio: 1; transform: translate(-50%, -50%);
+  background: radial-gradient(closest-side, rgba(120, 140, 255, .30), rgba(120, 140, 255, .08) 55%, transparent 75%);
+}
+.machine__svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.machine__globe { position: absolute; left: 10.667%; top: 6%; width: 78.667%; aspect-ratio: 1; border-radius: 50%; }
+.svg-plaque { font-family: 'Fredoka', sans-serif; font-weight: 700; font-size: 25px; letter-spacing: 1.2px; fill: #fff3d6; }
+.svg-label { font-family: 'Inter', sans-serif; font-weight: 800; font-size: 13px; letter-spacing: 5px; fill: rgba(230, 192, 140, .6); }
+.svg-coin { font-family: 'Fredoka', sans-serif; font-weight: 700; font-size: 15px; letter-spacing: 1px; fill: var(--gold-bright); }
+.crank__arm { transform-box: view-box; transform-origin: 214px 714px; }
+.crown-star { transform-box: view-box; transform-origin: 300px 24px; animation: twinkle 3.2s ease-in-out infinite; }
+@keyframes twinkle { 50% { transform: scale(1.12) rotate(12deg); filter: drop-shadow(0 0 10px #ffd98a); } }
+.bulbs circle { fill: #fff3d0; opacity: .55; }
+.ov-machine.is-busy .bulbs circle, .ov-machine.is-frenzy .bulbs circle { animation: bulb .5s steps(2) infinite; }
+.bulbs circle:nth-child(odd) { animation-delay: -.25s !important; }
+@keyframes bulb { 0% { opacity: .3; fill: #fff3d0; } 100% { opacity: 1; fill: #ffd98a; filter: drop-shadow(0 0 6px #ffd98a); } }
+.ov-machine.is-frenzy .ov-machine__in { animation: rumble .16s linear infinite; }
+@keyframes rumble { 25% { transform: translate(2px, -1px) rotate(.35deg); } 75% { transform: translate(-2px, 1px) rotate(-.35deg); } }
+.ov-machine.is-frenzy .crank__arm { animation: crankspin .4s linear infinite; }
+@keyframes crankspin { to { transform: rotate(360deg); } }
+
+.ov-tag {
+  position: absolute; left: 58%; top: 51%; z-index: 3; display: flex; align-items: center; gap: 7px; padding: 9px 15px 9px 28px;
+  background: linear-gradient(160deg, #fff7e4, #f3dcb0); color: #2a1d5c; border-radius: 8px 14px 14px 8px; transform: rotate(8deg);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, .45); clip-path: polygon(14px 0, 100% 0, 100% 100%, 14px 100%, 0 50%); font-weight: 800; white-space: nowrap;
+}
+.ov-tag::before { content: ''; position: absolute; left: 12px; top: 50%; width: 8px; height: 8px; margin-top: -4px; border-radius: 50%; background: #1a2050; }
+.ov-tag .pts-icon { width: 22px; height: 22px; color: #7b3cf0; }
+.ov-tag b { font-size: 24px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.ov-tag span { font-size: 12px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: #6c5a8f; }
+
+/* the rates sticker on the machine's body */
+.ov-rates {
+  position: absolute; left: 1%; top: 30%; z-index: 4; width: 196px; padding: 8px 12px 10px; transform: rotate(-7deg);
+  background: linear-gradient(170deg, rgba(32, 41, 95, .94), rgba(20, 26, 69, .94)); border: 2px solid var(--gold); border-radius: 12px;
+  box-shadow: 0 10px 22px rgba(0, 0, 0, .45), inset 0 1px 0 rgba(255, 255, 255, .12); text-align: left;
+}
+.ov-rates h4 { margin: 0 0 4px; font-family: 'Fredoka', sans-serif; font-weight: 700; font-size: 20px; letter-spacing: .18em; color: var(--gold-bright); }
+.ov-rates p { margin: 2px 0; display: flex; justify-content: space-between; gap: 6px; font-size: 14px; line-height: 1.15; font-weight: 800; letter-spacing: .02em; }
+.ov-rates p i { font-style: normal; font-variant-numeric: tabular-nums; }
+.ov-rates .ur { color: var(--c-ur); } .ov-rates .ssr { color: var(--c-ssr); } .ov-rates .dead { color: #c8cfdd; }
+
+/* ---------- chat's fingers ---------- */
+.ov-cursors { position: absolute; inset: 0; z-index: 8; }
+.ov-cur { position: absolute; left: 0; top: 0; will-change: transform; }
+.ov-cur svg { width: 46px; height: 46px; display: block; filter: drop-shadow(0 4px 6px rgba(0, 0, 0, .5)); }
+.ov-cur__name {
+  position: absolute; left: 30px; top: 40px; padding: 3px 9px; border-radius: 999px; white-space: nowrap;
+  font-size: 16px; font-weight: 600; color: #fff; background: var(--cc, #9146ff); box-shadow: 0 3px 8px rgba(0, 0, 0, .35), inset 0 -2px 0 rgba(0, 0, 0, .18);
+}
+
+/* ---------- redeem toasts (Twitch channel point redemptions) ---------- */
+.ov-toasts { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; z-index: 9; }
+.ov-toast {
+  position: absolute; left: 1055px; top: 0; display: flex; align-items: center; gap: 9px; padding: 8px 14px 8px 8px;
+  border-radius: 999px; background: linear-gradient(180deg, rgba(48, 28, 92, .97), rgba(28, 16, 58, .97));
+  border: 2px solid rgba(169, 112, 255, .9); box-shadow: 0 10px 28px rgba(0, 0, 0, .5), 0 0 24px rgba(145, 70, 255, .45);
+  white-space: nowrap; font-size: 17px; font-weight: 600; color: #efe7ff; translate: -50% 0;
+}
+.ov-toast__av { width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; font-weight: 700; font-size: 17px; color: #fff; flex: none; }
+.ov-toast b { font-weight: 700; }
+.ov-toast .rw { color: #fff; font-weight: 700; }
+.ov-toast__cost { display: inline-flex; align-items: center; gap: 6px; margin-left: 4px; padding: 4px 10px; border-radius: 999px; background: #9146ff; color: #fff; font-weight: 700; font-variant-numeric: tabular-nums; }
+.ov-toast__cost .pts-icon { width: 17px; height: 17px; }
+
+/* ---------- what chat has spent ---------- */
+.ov-spent { position: absolute; left: 1055px; top: 706px; z-index: 6; translate: -50% 0; text-align: center; white-space: nowrap; }
+.ov-spent small { display: block; font-size: 17px; font-weight: 600; letter-spacing: .2em; color: rgba(246, 227, 191, .85); text-transform: uppercase; }
+.ov-spent b { display: inline-flex; align-items: center; gap: 10px; font-size: 58px; font-weight: 700; letter-spacing: 0; font-variant-numeric: tabular-nums;
+  color: #fff; text-shadow: 0 0 18px rgba(169, 112, 255, .8), 0 4px 0 #5b2bb5; }
+.ov-spent b .pts-icon { width: 46px; height: 46px; color: #c9a8ff; }
+.ov-spent b { transform-origin: 50% 80%; }
+.ov-spent.is-hit b { animation: spentHit .34s linear; }
+@keyframes spentHit { 25% { transform: scale(1.22, .82); color: #ffd98a; } 50% { transform: scale(.92, 1.1); } 72% { transform: scale(1.04, .97); } 100% { transform: none; } }
+
+/* ---------- capsules ---------- */
+.ov-fly { position: absolute; left: 0; top: 0; z-index: 7; }
+.ov-cap { position: absolute; left: 0; top: 0; width: 120px; height: 120px; margin: -60px 0 0 -60px; filter: drop-shadow(0 12px 20px rgba(0, 0, 0, .45)); }
+.ov-cap i { position: absolute; left: 0; width: 100%; height: 50%; overflow: hidden; }
+.ov-cap .t { top: 0; border-radius: 999px 999px 0 0; background: var(--cap, #8fa6e8); box-shadow: inset 8px 10px 18px rgba(255, 255, 255, .45), inset -12px -4px 18px rgba(10, 14, 50, .28); border-bottom: 4px solid rgba(15, 18, 50, .22); }
+.ov-cap .b { top: 50%; border-radius: 0 0 999px 999px; background: linear-gradient(180deg, #fbf8f1, #e6ddca); box-shadow: inset -12px -10px 20px rgba(10, 14, 50, .22); }
+.ov-cap .k { position: absolute; left: -4%; right: -4%; top: 50%; height: 8px; margin-top: -4px; border-radius: 8px; opacity: 0; background: #fff; box-shadow: 0 0 18px 6px var(--glow, #ffd98a), 0 0 50px 16px var(--glow, #ffd98a); }
+.ov-cap.ssr .t { background: conic-gradient(from 200deg, #ff9ad5, #ffd98a, #9fefc8, #9fd3ff, #c9a8ff, #ff9ad5); }
+
+/* ---------- the big reveal (one pull, opened in front of the machine) ---------- */
+.ov-stage { position: absolute; left: 1055px; top: 470px; width: 0; height: 0; z-index: 7; }
+.ov-rays { position: absolute; left: -430px; top: -430px; width: 860px; height: 860px; border-radius: 50%; opacity: 0;
+  background: repeating-conic-gradient(from 0deg, var(--ray, rgba(255, 217, 138, .22)) 0 7deg, transparent 7deg 18deg);
+  -webkit-mask: radial-gradient(closest-side, #000 30%, transparent 100%); mask: radial-gradient(closest-side, #000 30%, transparent 100%); animation: spin 14s linear infinite; }
+@keyframes spin { to { rotate: 360deg; } }
+.ov-flash { position: absolute; left: -500px; top: -500px; width: 1000px; height: 1000px; border-radius: 50%; opacity: 0; background: radial-gradient(closest-side, #fff, rgba(255, 255, 255, .6) 40%, transparent 72%); }
+.ov-spark { position: absolute; left: -9px; top: -9px; width: 18px; height: 18px; background: var(--gold-bright); clip-path: polygon(50% 0, 62% 38%, 100% 50%, 62% 62%, 50% 100%, 38% 62%, 0 50%, 38% 38%); }
+
+/* the card: one per VTuber pulled */
+.ov-card {
+  position: absolute; width: 400px; height: 600px; left: -200px; top: -300px; border-radius: 34px; overflow: hidden; transform-origin: 50% 85%;
+  background: linear-gradient(180deg, #232b66, #12173e); border: 4px solid var(--rc, var(--gold));
+  box-shadow: 0 24px 60px rgba(0, 0, 0, .6), 0 0 40px var(--rg, rgba(255, 217, 138, .45));
+}
+.ov-card__art { position: absolute; left: 0; top: 0; width: 100%; height: 400px; background: #dfe3ee; overflow: hidden; }
+.ov-card__art img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 12%; display: block; }
+.ov-card__rar { position: absolute; left: 14px; top: 14px; padding: 6px 16px; border-radius: 999px; font-weight: 700; font-size: 24px; letter-spacing: .04em; rotate: -5deg; border: 3px solid #fff;
+  color: #161a3f; background: var(--rc, var(--gold)); box-shadow: 0 4px 10px rgba(0, 0, 0, .35); }
+.ov-card__body { position: absolute; left: 0; right: 0; top: 400px; bottom: 0; padding: 14px 20px 0; text-align: left; }
+.ov-card__name { margin: 0; font-family: 'Fredoka', sans-serif; font-weight: 700; font-size: 42px; line-height: 1.02; letter-spacing: 0;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ov-card__sub { margin: 6px 0 0; font-size: 20px; font-weight: 500; color: rgba(246, 242, 234, .72); white-space: nowrap; }
+.ov-card__who { position: absolute; left: 20px; right: 20px; bottom: 16px; display: flex; align-items: center; gap: 8px; font-size: 19px; font-weight: 600; white-space: nowrap; }
+.ov-card__who b { color: var(--uc, #bf94ff); overflow: hidden; text-overflow: ellipsis; }
+.ov-card__who span { margin-left: auto; display: inline-flex; align-items: center; gap: 5px; color: #d8c4ff; font-variant-numeric: tabular-nums; }
+.ov-card__who span .pts-icon { width: 19px; height: 19px; }
+.ov-card__dupe { position: absolute; right: 14px; top: 14px; padding: 6px 14px; border-radius: 999px; font-weight: 700; font-size: 24px; rotate: 6deg; border: 3px solid #fff; color: #fff; background: #e0425a; box-shadow: 0 4px 10px rgba(0, 0, 0, .35); }
+
+/* the rubber stamp */
+.ov-stamp {
+  position: absolute; left: 50%; top: 42%; translate: -50% -50%; rotate: -14deg; padding: 6px 22px 4px; white-space: nowrap;
+  font-family: 'Fredoka', sans-serif; font-weight: 700; font-size: 66px; letter-spacing: .06em; color: #e12d3d;
+  border: 7px solid #e12d3d; border-radius: 14px; background: rgba(255, 245, 240, .14);
+  mix-blend-mode: normal; text-shadow: 0 0 1px #e12d3d; box-shadow: inset 0 0 0 3px rgba(255, 255, 255, .0);
+  -webkit-mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='60'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' seed='4'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 -2.4 1.75'/></filter><rect width='120' height='60' filter='url(%23n)'/></svg>");
+  mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='60'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' seed='4'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 -2.4 1.75'/></filter><rect width='120' height='60' filter='url(%23n)'/></svg>");
+}
+.ov-mini .ov-stamp { font-size: 26px; border-width: 4px; padding: 3px 9px 2px; border-radius: 8px; }
+
+/* frenzy: small cards burst out of capsules and pile up around the machine */
+.ov-pile { position: absolute; inset: 0; z-index: 2; }
+.ov-pile.over { z-index: 10; }
+.ov-mini {
+  position: absolute; left: 0; top: 0; width: 170px; height: 236px; margin: -118px 0 0 -85px; border-radius: 20px; overflow: hidden;
+  background: #151a44; border: 3px solid var(--rc, var(--gold)); box-shadow: 0 10px 22px rgba(0, 0, 0, .55);
+}
+.ov-mini__art { position: absolute; left: 0; top: 0; width: 100%; height: 176px; background: #dfe3ee; }
+.ov-mini__art img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 12%; display: block; }
+.ov-mini__name { position: absolute; left: 0; right: 0; top: 178px; padding: 4px 8px 0; font-weight: 700; font-size: 18px; line-height: 1.1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-align: left; }
+.ov-mini__rar { position: absolute; left: 8px; bottom: 6px; font-size: 13px; font-weight: 700; letter-spacing: .08em; color: var(--rc, var(--gold)); }
+.ov-mini .ov-card__dupe { font-size: 14px; padding: 3px 7px; right: 6px; top: 6px; border-radius: 7px; }
+
+/* bubbly extras: a cartoon shock ring on each pop, coloured stars and hearts in the burst */
+.ov-ring { position: absolute; left: -60px; top: -60px; width: 120px; height: 120px; border-radius: 50%; border: 10px solid var(--rc, #ffd98a); opacity: 0; }
+.ov-heart { position: absolute; left: -14px; top: -14px; width: 28px; height: 28px; background: var(--hc, #ff9ad5);
+  clip-path: path('M14 25 C 4 17, 0 12, 0 7.5 C 0 3.3, 3.2 0.5, 7 0.5 C 9.8 0.5, 12.4 2.2, 14 4.6 C 15.6 2.2, 18.2 0.5, 21 0.5 C 24.8 0.5, 28 3.3, 28 7.5 C 28 12, 24 17, 14 25 Z'); }

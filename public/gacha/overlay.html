@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Every VTuber Gacha (overlay)</title>
+  <!-- OBS: add a Browser source, URL http://localhost:8921/overlay.html (add ?demo for pretend chat), 1920 x 1080. -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Inter:wght@500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="overlay.css" />
+</head>
+<body>
+  <div id="ov"></div>
+  <script type="module">
+    import { createOverlay } from './js/overlay.js';
+    import { FAKE_CHAT } from './js/names.js';
+    const q = new URLSearchParams(location.search);
+    const [data, famous, extra] = await Promise.all([
+      fetch('data/vtubers.json').then((r) => r.json()),
+      fetch('data/famous.json').then((r) => r.json()).catch(() => []),
+      fetch('data/extra.json').then((r) => r.json()).catch(() => []),
+    ]);
+    const pool = [...extra, ...data.pool];
+    const ov = createOverlay(document.getElementById('ov'), { pool, famous: new Set(famous), count: pool.length, cost: Number(q.get('cost')) || 1000 });
+    ov.showMachine();
+    window.gachaOverlay = ov;   // the plugin manager (or the console) calls ov.redeem(user) / ov.burst(user) / ov.setFrenzy(on)
+    if (q.has('demo')) {
+      // pretend chat: a redeem every few seconds; F toggles a frenzy
+      let i = 0, frenzy = false, open = null;
+      const next = () => FAKE_CHAT[i++ % FAKE_CHAT.length];
+      for (let k = 0; k < 5; k++) ov.addCursor(next());
+      const one = async () => {
+        if (frenzy) return;
+        if (open) ov.stow(open, 1500 + Math.random() * 300, 700 + Math.random() * 250, (Math.random() - 0.5) * 20);
+        open = await ov.redeem(next());
+      };
+      setInterval(one, 3600); one();
+      const tick = () => { if (frenzy) { ov.burst(next()); setTimeout(tick, 70 + Math.random() * 120); } };
+      addEventListener('keydown', (e) => { if (e.key.toLowerCase() === 'f') { frenzy = !frenzy; ov.setFrenzy(frenzy); tick(); } });
+    }
+  </script>
+</body>
+</html>

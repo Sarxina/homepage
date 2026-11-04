@@ -24,3 +24,4 @@ Hosted on AWS Amplify. Pushes to `main` build and deploy.
 - `/` the homepage
 - `/pluginmanager` redirects to the latest Sarxina Plugin Manager release
 - `/privacy/`, `/terms/`
+- `/gacha/` the Gacha Machine toy, a copy of `Random VTuber Toys/GachaMachine/web` (refresh with `node scripts/copy-gacha.mjs`); `/gatcha/` forwards to it

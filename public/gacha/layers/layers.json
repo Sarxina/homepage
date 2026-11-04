@@ -1,0 +1,281 @@
+{
+ "source": "Sarxina commission file.psd",
+ "width": 800,
+ "height": 768,
+ "scale": 2,
+ "pieces": {
+  "back": {
+   "x": 168,
+   "y": 128,
+   "w": 426,
+   "h": 546,
+   "opacity": 1.0,
+   "blend": "normal"
+  },
+  "arms_default": {
+   "x": 318,
+   "y": 428,
+   "w": 222,
+   "h": 198,
+   "opacity": 1.0,
+   "blend": "normal"
+  },
+  "arms_point_bracelet": {
+   "x": 188,
+   "y": 428,
+   "w": 352,
+   "h": 190,
+   "opacity": 1.0,
+   "blend": "normal"
+  },
+  "arms_point": {
+   "x": 318,
+   "y": 396,
+   "w": 314,
+   "h": 230,
+   "opacity": 1.0,
+   "blend": "normal"
+  },
+  "arms_shrug": {
+   "x": 162,
+   "y": 446,
+   "w": 482,
+   "h": 164,
+   "opacity": 1.0,
+   "blend": "normal"
+  },
+  "body_default": {
+   "x": 336,
+   "y": 424,
+   "w": 156,
+   "h": 198,
+   "opacity": 1.0,
+   "blend": "normal"
+  },
+  "body_crossed": {
+   "x": 336,
+   "y": 424,
+   "w": 156,
+   "h": 198,
+   "opacity": 1.0,
+   "blend": "normal"
+  },
+  "hair_back": {
+   "x": 168,
+   "y": 128,
+   "w": 426,
+   "h": 418,
+   "opacity": 1.0,
+   "blend": "normal"
+  },
+  "face": {
+   "x": 186,
+   "y": 164,
+   "w": 368,
+   "h": 306,
+   "opacity": 1.0,
+   "blend": "normal"
+  },
+  "face_shadow": {
+   "x": 198,
+   "y": 180,
+   "w": 296,
+   "h": 208,
+   "opacity": 1.0,
+   "blend": "normal"
+  },
+  "nose_open": {
+   "x": 334,
+   "y": 334,
+   "w": 28,
+   "h": 30,
+   "opacity": 1.0,
+   "blend": "normal"
+  },
+  "nose_closed": {
+   "x": 338,
+   "y": 352,
+   "w": 28,
+   "h": 30,
+   "opacity": 1.0,
+   "blend": "normal"
+  },
+  "glasses_open_lens": {
+   "x": 268,
+   "y": 294,
+   "w": 172,
+   "h": 70,
+   "opacity": 1.0,
+   "blend": "normal"
+  },
+  "glasses_open_frame": {
+   "x": 258,
+   "y": 286,
+   "w": 190,
+   "h": 86,
+   "opacity": 1.0,
+   "blend": "normal"
+  },
+  "glasses_closed": {
+   "x": 262,
+   "y": 298,
+   "w": 190,
+   "h": 86,
+   "opacity": 1.0,
+   "blend": "normal"
+  },
+  "mouth_talk": {
+   "x": 332,
+   "y": 358,
+   "w": 70,
+   "h": 80,
+   "opacity": 1.0,
+   "blend": "normal"
+  },
+  "mouth_scared": {
+   "x": 330,
+   "y": 388,
+   "w": 92,
+   "h": 64,
+   "opacity": 1.0,
+   "blend": "normal"
+  },
+  "mouth_gasp": {
+   "x": 346,
+   "y": 378,
+   "w": 44,
+   "h": 60,
+   "opacity": 1.0,
+   "blend": "normal"
+  },
+  "mouth_smile": {
+   "x": 336,
+   "y": 378,
+   "w": 62,
+   "h": 38,
+   "opacity": 1.0,
+   "blend": "normal"
+  },
+  "mouth_flat": {
+   "x": 340,
+   "y": 390,
+   "w": 66,
+   "h": 30,
+   "opacity": 1.0,
+   "blend": "normal"
+  },
+  "sweat": {
+   "x": 280,
+   "y": 380,
+   "w": 30,
+   "h": 48,
+   "opacity": 1.0,
+   "blend": "normal"
+  },
+  "mark_bang": {
+   "x": 120,
+   "y": 180,
+   "w": 74,
+   "h": 118,
+   "opacity": 1.0,
+   "blend": "normal"
+  },
+  "mark_question": {
+   "x": 530,
+   "y": 96,
+   "w": 102,
+   "h": 144,
+   "opacity": 1.0,
+   "blend": "normal"
+  },
+  "eyes_open": {
+   "x": 276,
+   "y": 268,
+   "w": 148,
+   "h": 82,
+   "opacity": 1.0,
+   "blend": "normal"
+  },
+  "eyes_happy": {
+   "x": 272,
+   "y": 294,
+   "w": 166,
+   "h": 66,
+   "opacity": 1.0,
+   "blend": "normal"
+  },
+  "eyes_closed": {
+   "x": 266,
+   "y": 288,
+   "w": 178,
+   "h": 68,
+   "opacity": 1.0,
+   "blend": "normal"
+  },
+  "brows_default": {
+   "x": 260,
+   "y": 254,
+   "w": 168,
+   "h": 62,
+   "opacity": 1.0,
+   "blend": "normal"
+  },
+  "brows_surprised": {
+   "x": 262,
+   "y": 240,
+   "w": 158,
+   "h": 62,
+   "opacity": 1.0,
+   "blend": "normal"
+  },
+  "brows_worried": {
+   "x": 262,
+   "y": 260,
+   "w": 174,
+   "h": 56,
+   "opacity": 1.0,
+   "blend": "normal"
+  },
+  "chest_crossed": {
+   "x": 310,
+   "y": 434,
+   "w": 190,
+   "h": 200,
+   "opacity": 1.0,
+   "blend": "normal"
+  },
+  "chest_default": {
+   "x": 320,
+   "y": 434,
+   "w": 164,
+   "h": 160,
+   "opacity": 1.0,
+   "blend": "normal"
+  },
+  "hair_front": {
+   "x": 198,
+   "y": 154,
+   "w": 312,
+   "h": 520,
+   "opacity": 1.0,
+   "blend": "normal"
+  },
+  "tex_stripes": {
+   "x": 214,
+   "y": 78,
+   "w": 330,
+   "h": 678,
+   "opacity": 0.149,
+   "blend": "multiply"
+  },
+  "tex_grain": {
+   "x": 0,
+   "y": 0,
+   "w": 800,
+   "h": 768,
+   "native": true,
+   "opacity": 0.349,
+   "blend": "overlay"
+  }
+ }
+}
