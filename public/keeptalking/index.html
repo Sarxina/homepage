@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0d1130" />
+    <meta name="description" content="The KeepTalking leaderboard: the most words said in one stream, by stream length. KeepTalking is an OBS plugin that closes your game if you stop talking for 5 seconds." />
+    <title>KeepTalking Leaderboard | Sarxina</title>
+    <meta property="og:title" content="KeepTalking Leaderboard" />
+    <meta property="og:description" content="The most words said in one stream, from Speedrun to Marathon." />
+    <meta property="og:image" content="https://sarxina.com/og.jpg" />
+    <meta property="og:url" content="https://sarxina.com/keeptalking/" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,500&family=Hanken+Grotesk:wght@400;600&display=swap" rel="stylesheet" />
+    <style>
+      /* The KeepTalking leaderboard. Colors and type are the site's own tokens (src/tokens.css), as on /design/. */
+      :root {
+        color-scheme: dark;
+        --color-paper: oklch(19.5% 0.061 274); --color-paper-2: oklch(23.5% 0.068 274);
+        --color-ink: oklch(96.2% 0.011 85); --color-ink-2: oklch(87% 0.022 80); --color-muted: oklch(76% 0.04 274);
+        --color-accent: oklch(82.9% 0.08 75); --color-rule-trim: oklch(44% 0.06 75); --color-focus: oklch(90.1% 0.106 85);
+        --font-display: "Bodoni Moda", "Didot", Georgia, serif; --font-body: "Hanken Grotesk", ui-sans-serif, system-ui, sans-serif;
+        --gutter: clamp(16px, 4vw, 64px);
+      }
+      *, *::before, *::after { box-sizing: border-box; }
+      html, body { overflow-x: clip; }
+      body {
+        margin: 0;
+        background: var(--color-paper);
+        color: var(--color-ink);
+        font-family: var(--font-body);
+        line-height: 1.65;
+        -webkit-font-smoothing: antialiased;
+      }
+      a { color: var(--color-accent); text-underline-offset: 0.18em; text-decoration-thickness: 1px; }
+      a:hover { color: var(--color-ink); }
+      :focus-visible { outline: 2px solid var(--color-focus); outline-offset: 3px; }
+
+      main { max-width: 1100px; margin: 0 auto; padding: clamp(40px, 6vw, 88px) var(--gutter) clamp(72px, 9vw, 128px); }
+
+      h1 { margin: 0 0 clamp(16px, 2vw, 24px); font-family: var(--font-display); font-weight: 500; font-size: clamp(2.5rem, 4.5vw + 1rem, 4.75rem); line-height: 1; letter-spacing: -0.01em; }
+      .intro { margin: 0; max-width: 62ch; color: var(--color-ink-2); font-size: 1.0625rem; }
+      .intro + .intro { margin-top: 10px; }
+
+      /* Category tabs: a row of names over a gold rule; the open one is underlined in gold. */
+      .tabs { display: flex; flex-wrap: wrap; gap: 4px clamp(16px, 3vw, 36px); margin: clamp(40px, 5vw, 64px) 0 0; border-bottom: 1px solid var(--color-rule-trim); }
+      .tab {
+        padding: 10px 0 12px; border: 0; border-bottom: 2px solid transparent; margin-bottom: -1px; background: none;
+        color: var(--color-muted); font: inherit; cursor: pointer; text-align: left; line-height: 1.25;
+      }
+      .tab__name { display: block; font-family: var(--font-display); font-size: clamp(1.25rem, 1vw + 1rem, 1.625rem); }
+      .tab__len { display: block; font-size: 0.875rem; }
+      .tab:hover { color: var(--color-ink); }
+      .tab[aria-selected="true"] { color: var(--color-ink); border-bottom-color: var(--color-accent); }
+      .tab[aria-selected="true"] .tab__len { color: var(--color-accent); }
+
+      .panel { padding-top: clamp(20px, 2.5vw, 32px); }
+      .status { margin: 0; padding: 24px 0; color: var(--color-ink-2); }
+      .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+
+      /* The table scrolls sideways inside its own box on a narrow screen; the page never does. */
+      .scroll { overflow-x: auto; border: 1px solid var(--color-rule-trim); padding: 6px; }
+      table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+      th, td { padding: 10px 14px; text-align: right; white-space: nowrap; border-bottom: 1px solid oklch(30% 0.05 274); }
+      tbody tr:last-child td { border-bottom: 0; }
+      th { color: var(--color-muted); font-weight: 600; font-size: 0.8125rem; letter-spacing: 0.06em; text-transform: uppercase; border-bottom-color: var(--color-rule-trim); }
+      th.l, td.l { text-align: left; }
+      td.rank { color: var(--color-muted); width: 1%; }
+      tbody tr:nth-child(-n+3) td.rank { color: var(--color-accent); font-family: var(--font-display); font-size: 1.125rem; }
+      td.who a { color: var(--color-ink); text-decoration: none; font-weight: 600; }
+      td.who a:hover { color: var(--color-accent); text-decoration: underline; }
+      td.words { color: var(--color-ink); font-weight: 600; }
+      td.muted { color: var(--color-ink-2); }
+
+      .updated { margin: 12px 0 0; color: var(--color-muted); font-size: 0.875rem; }
+
+      .join { margin: clamp(48px, 6vw, 80px) 0 0; max-width: 62ch; color: var(--color-ink-2); }
+
+      footer { margin-top: clamp(64px, 8vw, 112px); padding-top: 20px; border-top: 1px solid var(--color-rule-trim); color: var(--color-muted); font-size: 0.9375rem; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 24px; }
+
+      @media (max-width: 640px) {
+        .tabs { display: grid; grid-template-columns: 1fr 1fr; gap: 0 16px; }
+        th, td { padding: 9px 10px; }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <header>
+        <h1>KeepTalking Leaderboard</h1>
+        <p class="intro">Stop talking for 5 seconds and your game closes. Most words said in one stream.</p>
+      </header>
+
+      <div class="tabs" role="tablist" aria-label="Stream length">
+        <button class="tab" role="tab" id="tab-speedrun" aria-controls="board" data-cat="speedrun" type="button"><span class="tab__name">Speedrun</span><span class="tab__len">under 1 hour</span></button>
+        <button class="tab" role="tab" id="tab-short" aria-controls="board" data-cat="short" type="button"><span class="tab__name">Short Stream</span><span class="tab__len">1 to 4 hours</span></button>
+        <button class="tab" role="tab" id="tab-long" aria-controls="board" data-cat="long" type="button"><span class="tab__name">Long Stream</span><span class="tab__len">4 to 8 hours</span></button>
+        <button class="tab" role="tab" id="tab-marathon" aria-controls="board" data-cat="marathon" type="button"><span class="tab__name">Marathon</span><span class="tab__len">8 hours or more</span></button>
+      </div>
+
+      <section class="panel" id="board" role="tabpanel" tabindex="0" aria-live="polite">
+        <p class="status">Loading the leaderboard…</p>
+      </section>
+
+      <p class="join"><a href="https://github.com/Sarxina/sarxina-obs-plugins">Get KeepTalking</a></p>
+
+      <footer>
+        <span>Sarxina, Librarian of the Celestial Archives</span>
+        <a href="/">sarxina.com</a>
+      </footer>
+    </main>
+    <script>
+      // The leaderboard service's base URL (GET {BOARD_URL}/board).
+      const BOARD_URL = "https://ozubde2aiomsocqghzp4zvxuxa0yocei.lambda-url.us-east-1.on.aws";
+
+      const CATS = ["speedrun", "short", "long", "marathon"];
+      const tabs = [...document.querySelectorAll('.tab')];
+      const panel = document.getElementById('board');
+      let board = null;   // the /board answer once loaded
+      let failed = false;
+      let current = CATS.includes(location.hash.slice(1)) ? location.hash.slice(1) : 'speedrun';
+
+      const fmtInt = new Intl.NumberFormat('en-US');
+      const fmtDate = new Intl.DateTimeFormat(undefined, { year: 'numeric', month: 'short', day: 'numeric' });
+
+      function hms(sec) {
+        sec = Math.max(0, Math.round(Number(sec) || 0));
+        const h = Math.floor(sec / 3600), m = Math.floor(sec / 60) % 60, s = sec % 60;
+        return h + ':' + String(m).padStart(2, '0') + ':' + String(s).padStart(2, '0');
+      }
+      function day(iso) { const d = new Date(iso); return isNaN(d) ? '' : fmtDate.format(d); }
+      function el(tag, attrs, text) {
+        const e = document.createElement(tag);
+        for (const k in attrs || {}) e.setAttribute(k, attrs[k]);
+        if (text != null) e.textContent = text;
+        return e;
+      }
+      function status(text) { panel.replaceChildren(el('p', { class: 'status' }, text)); }
+
+      function render() {
+        if (failed) return status('The leaderboard service can’t be reached right now. Try again in a little while.');
+        if (!board) return status('Loading the leaderboard…');
+        const rows = (board.categories && board.categories[current]) || [];
+        if (!rows.length) return status('No streams in this category yet.');
+
+        const table = el('table');
+        const tab = tabs.find((t) => t.dataset.cat === current);
+        table.append(el('caption', { class: 'sr-only' }, tab.querySelector('.tab__name').textContent + ' leaderboard'));
+        const head = el('tr');
+        [['Rank', 'l'], ['Streamer', 'l'], ['Words', ''], ['Stream length', ''], ['Words / min', ''], ['Date', '']]
+          .forEach(([t, c]) => head.append(el('th', { scope: 'col', class: c }, t)));
+        const thead = el('thead');
+        thead.append(head);
+        table.append(thead);
+        const body = el('tbody');
+        for (const r of rows) {
+          const tr = el('tr');
+          tr.append(el('td', { class: 'l rank' }, String(r.rank)));
+          const who = el('td', { class: 'l who' });
+          const login = String(r.login || '').toLowerCase().replace(/[^a-z0-9_]/g, '');
+          who.append(el('a', { href: 'https://twitch.tv/' + encodeURIComponent(login), rel: 'noopener' }, r.display || r.login));
+          tr.append(who);
+          tr.append(el('td', { class: 'words' }, fmtInt.format(r.words)));
+          tr.append(el('td', { class: 'muted' }, hms(r.seconds)));
+          tr.append(el('td', { class: 'muted' }, fmtInt.format(Math.round(r.wpm))));
+          tr.append(el('td', { class: 'muted' }, day(r.started)));
+          body.append(tr);
+        }
+        table.append(body);
+        const box = el('div', { class: 'scroll' });
+        box.append(table);
+        panel.replaceChildren(box);
+      }
+
+      function select(cat, focus) {
+        current = cat;
+        tabs.forEach((t) => {
+          const on = t.dataset.cat === cat;
+          t.setAttribute('aria-selected', on ? 'true' : 'false');
+          t.tabIndex = on ? 0 : -1;
+          if (on) { panel.setAttribute('aria-labelledby', t.id); if (focus) t.focus(); }
+        });
+        history.replaceState(null, '', '#' + cat);
+        render();
+      }
+
+      tabs.forEach((t, i) => {
+        t.addEventListener('click', () => select(t.dataset.cat));
+        t.addEventListener('keydown', (e) => {
+          let j = null;
+          if (e.key === 'ArrowRight' || e.key === 'ArrowDown') j = (i + 1) % tabs.length;
+          else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') j = (i - 1 + tabs.length) % tabs.length;
+          else if (e.key === 'Home') j = 0;
+          else if (e.key === 'End') j = tabs.length - 1;
+          if (j === null) return;
+          e.preventDefault();
+          select(tabs[j].dataset.cat, true);
+        });
+      });
+
+      select(current);
+
+      fetch(BOARD_URL.replace(/\/+$/, '') + '/board', { headers: { Accept: 'application/json' } })
+        .then((r) => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+        .then((data) => { board = data; }, () => { failed = true; })
+        .then(() => {
+
+          render();
+        });
+    </script>
+  </body>
+</html>
